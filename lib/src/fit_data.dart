@@ -1,11 +1,11 @@
 part of fit_kit;
 
 class FitData {
-  final num value;
+  final num? value;
   final DateTime dateFrom;
   final DateTime dateTo;
-  final String source;
-  final bool userEntered;
+  final String? source;
+  final bool? userEntered;
 
   FitData(
     this.value,
