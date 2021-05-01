@@ -13,15 +13,15 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String result = '';
   Map<DataType, List<FitData>> results = Map();
-  bool permissions;
+  bool? permissions;
 
   RangeValues _dateRange = RangeValues(1, 8);
-  List<DateTime> _dates = List<DateTime>();
+  List<DateTime?> _dates = [];
   double _limitRange = 0;
 
-  DateTime get _dateFrom => _dates[_dateRange.start.round()];
-  DateTime get _dateTo => _dates[_dateRange.end.round()];
-  int get _limit => _limitRange == 0.0 ? null : _limitRange.round();
+  DateTime? get _dateFrom => _dates[_dateRange.start.round()];
+  DateTime? get _dateTo => _dates[_dateRange.end.round()];
+  int? get _limit => _limitRange == 0.0 ? null : _limitRange.round();
 
   @override
   void initState() {
@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp> {
 
     try {
       permissions = await FitKit.requestPermissions(DataType.values);
-      if (!permissions) {
+      if (!permissions!) {
         result = 'requestPermissions: failed';
       } else {
         for (DataType type in DataType.values) {
@@ -130,8 +130,8 @@ class _MyAppState extends State<MyApp> {
                       return Padding(
                         padding: EdgeInsets.symmetric(vertical: 8),
                         child: Text(
-                          '$item - ${results[item].length}',
-                          style: Theme.of(context).textTheme.title,
+                          '$item - ${results[item]!.length}',
+                          style: Theme.of(context).textTheme.headline6,
                         ),
                       );
                     } else if (item is FitData) {
@@ -158,7 +158,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  String _dateToString(DateTime dateTime) {
+  String _dateToString(DateTime? dateTime) {
     if (dateTime == null) {
       return 'null';
     }
@@ -204,20 +204,36 @@ class _MyAppState extends State<MyApp> {
     return Row(
       children: [
         Expanded(
-          child: FlatButton(
-            color: Theme.of(context).accentColor,
-            textColor: Colors.white,
+          child: TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(
+                Theme.of(context).accentColor,
+              ),
+            ),
             onPressed: () => read(),
-            child: Text('Read'),
+            child: Text(
+              'Read',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
         Padding(padding: EdgeInsets.symmetric(horizontal: 4)),
         Expanded(
-          child: FlatButton(
-            color: Theme.of(context).accentColor,
-            textColor: Colors.white,
+          child: TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(
+                Theme.of(context).accentColor,
+              ),
+            ),
             onPressed: () => revokePermissions(),
-            child: Text('Revoke permissions'),
+            child: Text(
+              'Revoke permissions',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
       ],
